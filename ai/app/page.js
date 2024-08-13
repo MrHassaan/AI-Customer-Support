@@ -7,7 +7,7 @@ export default function Home() {
   const [messages, setMessages] = useState([
     {
       role: 'assistant',
-      content: "Hi! I'm the Ruby your support assistant. How can I help you today?",
+      content: "Hi! I'm Ruby, your support assistant. How can I help you today?",
     },
   ])
   const [message, setMessage] = useState('')
@@ -17,12 +17,12 @@ export default function Home() {
     if (!message.trim() || isLoading) return
     setIsLoading(true)
 
-    setMessage('')
     setMessages((messages) => [
       ...messages,
       { role: 'user', content: message },
       { role: 'assistant', content: '' },
     ])
+    setMessage('')
 
     try {
       const response = await fetch('/api/chat', {
@@ -80,14 +80,18 @@ export default function Home() {
       flexDirection="column"
       justifyContent="center"
       alignItems="center"
+      color="white"
+      bgcolor="#121212"  // Dark background color
     >
       <Stack
         direction={'column'}
         width="500px"
         height="700px"
-        border="1px solid black"
+        border="1px solid #333"  // Border color
         p={2}
         spacing={3}
+        bgcolor="#1e1e1e"  // Slightly lighter background for the chat container
+        borderRadius={4}
       >
         <Stack
           direction={'column'}
@@ -105,8 +109,8 @@ export default function Home() {
               <Box
                 bgcolor={
                   message.role === 'assistant'
-                    ? 'primary.main'
-                    : 'secondary.main'
+                    ? '#1976d2'  // Blue for assistant messages
+                    : '#2e7d32'  // Green for user messages
                 }
                 color="white"
                 borderRadius={16}
@@ -125,11 +129,30 @@ export default function Home() {
             onChange={(e) => setMessage(e.target.value)}
             onKeyDown={handleKeyDown}
             disabled={isLoading}
+            InputLabelProps={{
+              style: { color: '#888' },  // Label color
+            }}
+            InputProps={{
+              style: {
+                color: 'white',  // Text color
+                backgroundColor: '#333',  // Input field background color
+                borderRadius: 8,
+              },
+            }}
           />
           <Button 
-            variant="contained" 
+            variant="contained"
             onClick={sendMessage}
             disabled={isLoading}
+            sx={{
+              bgcolor: '#388e3c',  // Default button color (green)
+              '&:hover': {
+                bgcolor: '#2e7d32',  // Hover color (darker green)
+              },
+              '&:disabled': {
+                bgcolor: '#555',  // Disabled color
+              },
+            }}
           >
             {isLoading ? 'Sending...' : 'Send'}
           </Button>
